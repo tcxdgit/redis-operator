@@ -209,6 +209,7 @@ func TestClusterNodesRememberTopology(t *testing.T) {
 			name:    "fresh nodes know nobody",
 			leaders: 3,
 			setup: func(t *testing.T) func(podName string) *redis.Client {
+				t.Helper()
 				return func(podName string) *redis.Client {
 					client, mock := redismock.NewClientMock()
 					mock.ExpectClusterNodes().SetVal(singleNode)
@@ -222,6 +223,7 @@ func TestClusterNodesRememberTopology(t *testing.T) {
 			name:    "a leader remembering peers means an existing topology",
 			leaders: 3,
 			setup: func(t *testing.T) func(podName string) *redis.Client {
+				t.Helper()
 				return func(podName string) *redis.Client {
 					client, mock := redismock.NewClientMock()
 					mock.ExpectClusterNodes().SetVal(twoNodes)
@@ -235,6 +237,7 @@ func TestClusterNodesRememberTopology(t *testing.T) {
 			name:    "unreachable leaders are skipped, next leader answers",
 			leaders: 3,
 			setup: func(t *testing.T) func(podName string) *redis.Client {
+				t.Helper()
 				return func(podName string) *redis.Client {
 					client, mock := redismock.NewClientMock()
 					if strings.HasSuffix(podName, "-0") {
@@ -252,6 +255,7 @@ func TestClusterNodesRememberTopology(t *testing.T) {
 			name:    "all leaders unreachable means no known topology",
 			leaders: 2,
 			setup: func(t *testing.T) func(podName string) *redis.Client {
+				t.Helper()
 				return func(podName string) *redis.Client {
 					client, mock := redismock.NewClientMock()
 					mock.ExpectClusterNodes().SetErr(redis.ErrClosed)
